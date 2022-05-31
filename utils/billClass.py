@@ -7,6 +7,9 @@ class Bill:
         self.year = year
         self.value = value
         self.weight = 0
+        self.payments = list()
+        Bill.calculate(self)
+        
 
     #TODO chance this method so it works accordingly to the project
     def new_payment(self, value : float, name : str):
@@ -21,9 +24,8 @@ class Bill:
         for member in self.members:
             self.weight += member[1]
         for member in self.members:
-            member_total = self.value * member[1] / self.weight
-
-
+            must_pay = (self.value * member[1] / self.weight) - member[2]
+            self.payments.append([member[0], must_pay])
 
     def get_name(self):
         return self.name
@@ -46,11 +48,12 @@ class Bill:
     def get_date(self):
         return f'{self.day}/{self.month}/{self.year}'
 
+    def get_payments(self):
+        return self.payments
+
     def bill_info(self):
         info = f'Name: {self.name} \nCreated on: {self.day}/{self.month}/{self.year}'
         for member in self.members:
-            info += '\n' + member[0] + f'contribuição: {member[1]}, pagou: {member[2]}'
+            info += '\n' + member[0] + f': contribution: {member[1]}, payed: {member[2]}'
         
         return info
-
-    
