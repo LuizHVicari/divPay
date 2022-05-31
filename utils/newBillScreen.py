@@ -1,41 +1,33 @@
 from datetime import date
-from asyncio.windows_events import NULL
 from kivy.properties import ObjectProperty
 from billClass import Bill
 
 def create_new_bill(name : str, members : list, participation : list):
-    aux_member = dict()
-    aux_participation = list()
-
-    #name = ObjectProperty(None)
-    #members = ObjectProperty(None)
-    #participation = ObjectProperty(None)
+    aux_member = list()
+    #TODO change this to be a received value
+    create_day = date.today()
 
     if len(name) > 0 and len(name) < 50 and name.isidentifier():
-        name = name.capitalize()
         name = name.strip()
+        name = name.lower()
+        name = name.capitalize()
     
     else:
         return False
 
-    for member in members:
-        if len(member) > 0 and len(member) < 50 and member.isidentifier():
-            member = member.capitalize()
-            member = member.strip()  
-            aux_member.update({member : 0})
-        else:
-            return False
+    if len(members) == len(participation) and len(members) > 0:
+        for (member, contribution) in zip(members, participation):
+            if type(member) == str:
+                member = member.strip()
+                member = member.lower()
+                member = member.capitalize()
+                aux_member.append([member, int(contribution)])
+            else:
+                return False
 
-    for member_part in participation:
-        if member_part.isnumeric() and int(member_part) > 0 and int(member_part) == float(member_part):
-            aux_participation.append(int(member_part))
-        else:
-            return False
-    
-    create_day = date.today()
     day = create_day.day
     month = create_day.month
     year = create_day.year
 
-    new_bill = Bill(name, aux_member, day, month, year, participation)
+    new_bill = Bill(name, aux_member, day, month, year)
     return new_bill
