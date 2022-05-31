@@ -1,13 +1,14 @@
-# TODO: criar o método para dividir as contas 
 class Bill:
-    def __init__(self, name : str, members : dict, day : int, month : int, year : int):
+    def __init__(self, name : str, members : dict, value : float, day : int, month : int, year : int):
         self.name = name
         self.members = members
         self.day = day
         self.month = month
         self.year = year
-        self.value = 0
+        self.value = value
+        self.weight = 0
 
+    #TODO chance this method so it works accordingly to the project
     def new_payment(self, value : float, name : str):
         if value > 0 and name in self.members.keys():
             self.value += value
@@ -15,9 +16,14 @@ class Bill:
             return True
         return False
 
-    # function to pay off the debt between members
-    def pay_debt():
-        pass
+    #TODO create this method to calculate how much the members should pay to each other
+    def calculate(self):
+        for member in self.members:
+            self.weight += member[1]
+        for member in self.members:
+            member_total = self.value * member[1] / self.weight
+
+
 
     def get_name(self):
         return self.name
@@ -43,7 +49,7 @@ class Bill:
     def bill_info(self):
         info = f'Name: {self.name} \nCreated on: {self.day}/{self.month}/{self.year}'
         for member in self.members:
-            info += '\n' + member[0] + f': {member[1]}'
+            info += '\n' + member[0] + f'contribuição: {member[1]}, pagou: {member[2]}'
         
         return info
 
