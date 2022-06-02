@@ -1,5 +1,14 @@
 class Bill:
     def __init__(self, name : str, members : dict, value : float, day : int, month : int, year : int):
+        '''
+        Builder for the Bill class
+        @param name: name of the bill
+        @param members: list of members
+        @param value: total value of the bill
+        @param day: day of the bill, month: month of the bill
+        @param year: year of the bill
+        @return a new Bill object
+        '''
         self.name = name
         self.members = members
         self.day = day
@@ -10,17 +19,23 @@ class Bill:
         self.payments = list()
         Bill.calculate(self)
         
-
-    #TODO chance this method so it works accordingly to the project
     def new_payment(self, value : float, name : str):
+        '''
+        Executes a new payment for the bill
+        @param value: value of the payment, name: name of the member	
+        @return True if the payment was successful, False otherwise
+        '''
         if value > 0 and name in self.members.keys():
             self.value += value
             self.members[name] += value
             return True
         return False
 
-    #TODO create this method to calculate how much the members should pay to each other
     def calculate(self):
+        '''
+        Calculates how much each member should pay
+        @return a list of lists with the name of the member and the value to pay
+        '''
         for member in self.members:
             self.weight += member[1]
         for member in self.members:
@@ -51,9 +66,18 @@ class Bill:
     def get_payments(self):
         return self.payments
 
-    def bill_info(self):
+    def bill_info_string(self):
+        '''
+        @return a string with the information of the bill
+        '''
         info = f'Name: {self.name} \nCreated on: {self.day}/{self.month}/{self.year}'
         for member in self.members:
             info += '\n' + member[0] + f': contribution: {member[1]}, payed: {member[2]}'
         
         return info
+
+    def bill_info_list(self):
+        '''
+        @return a string with the information of the bill
+        '''
+        return [self.name, self.members, self.value, self.payments,self.day, self.month, self.year]

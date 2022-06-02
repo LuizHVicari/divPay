@@ -3,11 +3,19 @@ from billClass import Bill
 import functions
 
 def create_new_bill(name : str, members : list, participation : list, payments : list):
+    '''
+    Creates a new bill
+    @param name: name of the bill
+    @param members: list of members
+    @param participation: list of participation values
+    @param payments: list of payments
+    @return a new Bill object if it was succesfull, False otherwise
+    '''
     aux_member = list()
-    #TODO change this to be a received value
     creation_day = date.today()
     value = 0
 
+    # Validates the name
     if len(name) > 0 and len(name) < 50 and name.isidentifier():
         name = name.strip()
         name = name.lower()
@@ -15,7 +23,8 @@ def create_new_bill(name : str, members : list, participation : list, payments :
     
     else:
         return False
-
+    
+    # Validates the members and their participation
     if len(members) == len(participation) and len(members) == len(payments) and len(members) > 0:
         for (member, contribution, pay) in zip(members, participation, payments):
             if type(member) == str:
@@ -44,5 +53,4 @@ def create_new_bill(name : str, members : list, participation : list, payments :
     month = creation_day.month
     year = creation_day.year
 
-    new_bill = Bill(name, aux_member, value, day, month, year)
-    return new_bill
+    return  Bill(name, aux_member, value, day, month, year)
