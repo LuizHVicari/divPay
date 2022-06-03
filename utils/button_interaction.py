@@ -22,6 +22,12 @@ def create_new_bill(name : str, members : list, participation : list, payments :
     
     else:
         return False
+
+    for member in members:
+        if members.count(member) == 1:
+            pass
+        else:
+            return False
     
     # Validates the members and their participation
     if len(members) == len(participation) and len(members) == len(payments) and len(members) > 0:
@@ -63,3 +69,45 @@ def create_new_bill(name : str, members : list, participation : list, payments :
         return False
 
     return Bill(name, aux_member, value, day, month, year)
+
+def edit_member_name(bill : Bill, old_name : str, new_name : str):
+    '''
+    Edits the name of a member
+    @param bill: bill object
+    @param old_name: old name of the member
+    @param new_name: new name of the member
+    @return True if the name was changed, False otherwise
+    '''
+    if type(new_name) == str:
+            new_name = new_name.strip()
+            new_name = new_name.lower()
+            new_name = new_name.capitalize()
+    else:
+        return False
+
+    for member in bill.members:
+        if member[0] == new_name:
+            return False
+
+    for member in bill.members:
+        if member[0] == old_name:
+            member[0] = new_name
+            return True
+    return False
+
+def edit_bill_name(bill : Bill, new_name : str):
+    '''
+    Edits the name of a bill
+    @param bill: bill object
+    @param new_name: new name of the bill
+    @return True if the name was changed, False otherwise
+    '''
+    if type(new_name) == str:
+            new_name = new_name.strip()
+            new_name = new_name.lower()
+            new_name = new_name.capitalize()
+    else:
+        return False
+
+    bill.name = new_name
+    return True

@@ -43,24 +43,6 @@ class Bill:
             must_pay = (self.value * member[1] / self.weight) - member[2]
             self.payments.append([member[0], round(must_pay, 2)])
 
-    def get_payments(self):
-        return self.payments
-
-    def bill_info_string(self):
-        '''
-        @return a string with the information of the bill
-        '''
-        info = f'Name: {self.name} \nCreated on: {self.day}/{self.month}/{self.year}'
-        for member in self.members:
-            info += '\n' + member[0] + f': contribution: {member[1]}, payed: {member[2]}'
-        
-        return info
-
-    def bill_info_list(self):
-        '''
-        @return a string with the information of the bill
-        '''
-        return [self.name, self.members, self.value, self.payments,self.day, self.month, self.year]
 
     def edit_member_name(self, old_name : str, new_name : str):
         '''
@@ -161,3 +143,22 @@ class Bill:
         print(payments)
 
         return payments
+    
+    def get_payments(self):
+        return self.payments
+
+    def bill_info_string(self):
+        '''
+        @return a string with the information of the bill
+        '''
+        info = f'Name: {self.name} \nCreated on: {self.day}/{self.month}/{self.year}'
+        for member in self.members:
+            info += '\n' + member[0] + f': contribution: {member[1]}, payed: {member[2]}'
+        
+        return info
+
+    def bill_info_list(self):
+        '''
+        @return a string with the information of the bill
+        '''
+        return [self.name, self.members, self.value, self.payments,self.day, self.month, self.year]
