@@ -18,6 +18,7 @@ class Bill:
         self.weight = 0
         self.payments = list()
         Bill.calculate(self)
+        self.how_to_pay = Bill.how_to_pay(self)
         
     def new_payment(self, value : float, name : str):
         '''
@@ -40,28 +41,7 @@ class Bill:
             self.weight += member[1]
         for member in self.members:
             must_pay = (self.value * member[1] / self.weight) - member[2]
-            self.payments.append([member[0], must_pay])
-
-    def get_name(self):
-        return self.name
-
-    def get_members(self):
-        info = str()
-        for member in self.members:
-            info += f'{member}'
-        return info
-    
-    def get_day(self):
-        return self.day
-    
-    def get_month(self):
-        return self.month
-
-    def get_year(self):
-        return self.year
-
-    def get_date(self):
-        return f'{self.day}/{self.month}/{self.year}'
+            self.payments.append([member[0], round(must_pay, 2)])
 
     def get_payments(self):
         return self.payments
@@ -81,3 +61,103 @@ class Bill:
         @return a string with the information of the bill
         '''
         return [self.name, self.members, self.value, self.payments,self.day, self.month, self.year]
+
+    def edit_member_name(self, old_name : str, new_name : str):
+        '''
+        Edits the name of a member
+        @param old_name: old name of the member	
+        @param new_name: new name of the member
+        @return True if the name was changed, False otherwise
+        '''
+        for member in self.members:
+            if member[0] == old_name:
+                member[0] = new_name
+                return True
+        return False
+    
+    def edit_member_contribution(self, name : str, value : int):
+        '''
+        Edits the contribution of a member
+        @param name: name of the member	
+        @param value: new value of the member
+        @return True if the value was changed, False otherwise
+        '''
+        for member in self.members:
+            if member[0] == name:
+                member[1] = value
+                return True
+        return False
+    
+    def edit_member_pay(self, name : str, pay : float):
+        '''
+        Edits the pay of a member
+        @param name: name of the member
+        @param pay: new pay of the member
+        @return True if the pay was changed, False otherwise
+        '''
+        for member in self.members:
+            if member[0] == name:
+                member[2] = pay
+                return True
+        return False
+
+    def edit_bill_name(self, name : str):
+        '''
+        Edits the name of the bill
+        @param name: new name of the bill
+        @return True if the name was changed
+        '''
+        self.name = name
+        return True
+    
+    def delete_member(self, name : str):
+        '''
+        Deletes a member from the bill
+        @param name: name of the member
+        @return True if the member was deleted, False otherwise
+        '''
+        for member in self.members:
+            if member[0] == name:
+                self.members.remove(member)
+                return True
+
+    def how_to_pay(self):
+        '''
+        Calculates how much each member should pay
+        @return a list of lists with the name of the debitor, the name of the creditor and the value to pay
+        '''
+        creditor = list()
+        debitor = list()
+        payments = list()
+        for member in self.payments:
+            if member[1] < 0:
+                creditor.append(member)
+            if member[1] > 0:
+                debitor.append(member)
+
+        creditor_index = 0
+        debitor_index = 0
+
+        while(creditor_index < len(creditor) and debitor_index < len(debitor)):
+            if round(debitor[debitor_index][1], 2) == -round(creditor[creditor_index][1], 2):
+                payments.append((debitor[debitor_index][0], creditor[creditor_index][0], debitor[debitor_index][1]))
+                debitor[debitor_index][1] = 0
+                creditor[creditor_index][1] = 0
+                creditor_index += 1
+                debitor_index += 1
+            elif round(debitor[debitor_index][1], 2) < -round(creditor[creditor_index][1], 2):
+                payments.append((debitor[debitor_index][0], creditor[creditor_index][0], debitor[debitor_index][1]))
+                creditor[creditor_index][1] += debitor[debitor_index][1]
+                creditor[creditor_index][1] = round(creditor[creditor_index][1], 2)
+                debitor[debitor_index][1] = 0
+                debitor_index += 1
+            else:
+                payments.append((debitor[debitor_index][0], creditor[creditor_index][0], -creditor[creditor_index][1]))
+                debitor[debitor_index][1] += creditor[creditor_index][1]
+                debitor[debitor_index][1] = round(debitor[debitor_index][1], 2)
+                creditor[creditor_index][1] = 0
+                creditor_index += 1
+
+        print(payments)
+
+        return payments

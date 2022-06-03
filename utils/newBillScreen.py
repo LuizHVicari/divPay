@@ -2,7 +2,7 @@ from datetime import date
 from billClass import Bill
 import functions
 
-def create_new_bill(name : str, members : list, participation : list, payments : list):
+def create_new_bill(name : str, members : list, participation : list, payments : list, day : int, month : int, year : int):
     '''
     Creates a new bill
     @param name: name of the bill
@@ -12,7 +12,6 @@ def create_new_bill(name : str, members : list, participation : list, payments :
     @return a new Bill object if it was succesfull, False otherwise
     '''
     aux_member = list()
-    creation_day = date.today()
     value = 0
 
     # Validates the name
@@ -49,8 +48,18 @@ def create_new_bill(name : str, members : list, participation : list, payments :
     else:
         return False
 
-    day = creation_day.day
-    month = creation_day.month
-    year = creation_day.year
+    if month > 12:
+        return False
+    
+    if day > 31:
+        return False
+    elif day > 30 and month == 4 or month == 6 or month == 9 or month == 11:
+        return False
+    elif day > 28 and year % 4 != 0 and month == 2:
+        return False
+    elif day > 29 and month == 2:
+        return False
+    elif day < 0 or month < 0 or year < 0:
+        return False
 
-    return  Bill(name, aux_member, value, day, month, year)
+    return Bill(name, aux_member, value, day, month, year)
