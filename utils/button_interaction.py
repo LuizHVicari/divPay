@@ -71,7 +71,7 @@ def create_new_bill(name : str, members : list, participation : list, payments :
     return Bill(name, aux_member, value, day, month, year)
 
 def edit_member_name(bill : Bill, old_name : str, new_name : str):
-    '''
+    ''' "
     Edits the name of a member
     @param bill: bill object
     @param old_name: old name of the member
@@ -111,3 +111,27 @@ def edit_bill_name(bill : Bill, new_name : str):
 
     bill.name = new_name
     return True
+
+def solve_bill(bill : Bill):
+    '''
+    Solves a bill
+    @param bill: bill object
+    @return True if the bill was solved, False otherwise
+    '''
+    if bill.solved:
+        return False
+    else:
+        bill.solved = True
+        return True
+
+def unsolve_bill(bill : Bill):
+    '''
+    Unsolves a bill
+    @param bill: bill object
+    @return True if the bill was unsolved, False otherwise
+    '''
+    if not bill.solved:
+        return False
+    else:
+        bill.solved = False
+        return True

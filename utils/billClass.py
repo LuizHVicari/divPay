@@ -17,6 +17,7 @@ class Bill:
         self.value = value
         self.weight = 0
         self.payments = list()
+        self.solved = False
         Bill.calculate(self)
         self.how_to_pay = Bill.how_to_pay(self)
         
@@ -106,7 +107,7 @@ class Bill:
     def how_to_pay(self):
         '''
         Calculates how much each member should pay
-        @return a list of lists with the name of the debitor, the name of the creditor and the value to pay
+        @return a list of tuples in the format: ("debitor's name", "creditor's name", value to pay)
         '''
         creditor = list()
         debitor = list()
@@ -162,3 +163,5 @@ class Bill:
         @return a string with the information of the bill
         '''
         return [self.name, self.members, self.value, self.payments,self.day, self.month, self.year]
+
+        
