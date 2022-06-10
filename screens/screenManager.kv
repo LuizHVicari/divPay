@@ -2,6 +2,7 @@
 #: import SlideTransition kivy.uix.screenmanager.SlideTransition
 #: import get_color_from_hex kivy.utils.get_color_from_hex
 #: import dp kivy.metrics.dp
+
 # Referencia as telas com as classes
 MyScreenManager:
 	transition: SlideTransition(direction="left")
@@ -135,13 +136,18 @@ MyScreenManager:
                 MDRaisedButton:
                     text: "Selecionar data"
                     pos_hint: {'center_x': .5, 'center_y': .5}
-                    on_release: app.show_date_picker()
+                    on_release: 
+                        app.show_date_picker()
                 
                 MDRaisedButton:
                     text: "Selecionar Membros"
                     pos_hint: {'center_x': .5, 'center_y': .5}
-                    on_release: 
-                        app.show_tabela()
+                    on_release:
+                        root.manager.transition.direction = 'left'
+                        root.manager.current = 'add_member'
+
+
+                        
 
             MDBoxLayout:
                 size_hint: 1, .5
@@ -169,11 +175,23 @@ MyScreenManager:
 <AddMemberScreen>:
     MDScreen:
         
+        
         MDBoxLayout:
             orientation: 'vertical'
             halign: 'center'
             size_hint: 1, 1
     
+
+            MDRaisedButton:
+                text: "Tabela de Membros"
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                on_release:
+                    root.add_widget(app.show_table_menu()) 
+                    
+                    
+                        
+                    
+
             MDBoxLayout:
                 spacing: '16dp'
                 orientation: 'vertical'
