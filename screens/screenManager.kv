@@ -1,0 +1,237 @@
+# Importa a transição a ser utilizada
+#: import SlideTransition kivy.uix.screenmanager.SlideTransition
+#: import get_color_from_hex kivy.utils.get_color_from_hex
+#: import dp kivy.metrics.dp
+# Referencia as telas com as classes
+MyScreenManager:
+	transition: SlideTransition(direction="left")
+	id: screen_manager
+
+    SplashScreen:
+		id: tela_splash
+		name: 'splash'
+		manager: screen_manager
+
+    MenuScreen:
+		id: tela_menu
+		name: 'menu'
+		manager: screen_manager
+
+    AddScreen:
+        id: tela_add
+        name: 'add'
+        manager: screen_manager
+
+    AddBillScreen:
+        id: tela_add_bill
+        name: 'add_bill'
+        manager: screen_manager
+
+    AddMemberScreen:
+        id: tela_add_member
+        name: 'add_member'
+        manager: screen_manager
+
+
+
+########################################################################
+<MenuScreen>:
+    MDScreen:
+
+        MDBoxLayout:
+            orientation: 'vertical'
+
+            MDLabel:
+                text: "Bem vindo ao DivPay"
+                halign: 'center'
+                theme_text_color: 'Primary'
+                font_style: 'H6'
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDBottomAppBar:
+                MDToolbar:
+                    title: "DivPay"
+                    icon: "plus"
+                    type: "bottom"
+                    mode: "end"
+                    on_action_button: 
+                        app.root.transition.direction = 'up'
+                        app.root.current = 'add_bill'
+                
+
+
+########################################################################
+                    
+<AddScreen>:
+    MDScreen:
+        MDBoxLayout:
+            orientation: 'vertical'    
+            MDRaisedButton:
+                size_hint_x: 1
+                size_hint_y: 0.8
+                halign: 'center'
+                text: "Adicionar Conta"
+                md_bg_color: app.theme_cls.primary_color
+                on_release:
+                    root.manager.transition.direction = 'left'
+                    root.manager.current = 'add_bill'
+                
+
+            MDRaisedButton:
+                size_hint_x: 1
+                size_hint_y: 0.8
+                halign: 'center'
+                text: "Adicionar Membro"
+                md_bg_color: app.theme_cls.primary_color
+                on_release:
+                    root.manager.transition.direction = 'right'
+                    root.manager.current = 'add_member'
+            
+            MDRaisedButton:
+                size_hint_x: 1
+                size_hint_y: 0.4
+                halign: 'center'
+                text: "Cancelar"
+                md_bg_color: [1, 0, 0, 1]
+                on_release:
+                    root.manager.transition.direction = 'down'
+                    root.manager.current = 'menu'
+                
+                
+
+########################################################################
+<AddBillScreen>:
+    MDScreen:
+        MDBoxLayout:
+            orientation: 'vertical'
+            halign: 'center'
+            size_hint: 1, 1
+            
+            
+            MDBoxLayout:
+
+                spacing: '16dp'
+                orientation: 'vertical'
+                halign: 'center'
+                size_hint: 1, 1
+                
+                MDLabel:
+                    text: "Adicionar Conta"
+                    halign: 'center'
+                    theme_text_color: 'Primary'
+                    font_style: 'H6'
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDTextField:
+                    pos_hint: {'center_x': 0.5,'center_y': 0.5}
+                    size_hint: .8, None
+                    hint_text: "Nome da conta"
+                    mode: "rectangle"
+                    max_text_length: 50
+                    helper_text: "Ex: Contas de março"
+                
+                MDRaisedButton:
+                    text: "Selecionar data"
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    on_release: app.show_date_picker()
+                
+                MDRaisedButton:
+                    text: "Selecionar Membros"
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    on_release: 
+                        app.show_tabela()
+
+            MDBoxLayout:
+                size_hint: 1, .5
+
+            MDRaisedButton:
+                size_hint_x: 1
+                size_hint_y: 0.2
+                halign: 'center'
+                text: "Aceitar"
+                md_bg_color: app.theme_cls.primary_color
+                on_release:
+                    root.manager.transition.direction = 'down'
+                    root.manager.current = 'menu'
+            MDRaisedButton:
+                size_hint_x: 1
+                size_hint_y: 0.2
+                halign: 'center'
+                text: "Cancelar"
+                md_bg_color: [1, 0, 0, 1]
+                on_release:
+                    root.manager.transition.direction = 'down'
+                    root.manager.current = 'menu'
+
+########################################################################
+<AddMemberScreen>:
+    MDScreen:
+        
+        MDBoxLayout:
+            orientation: 'vertical'
+            halign: 'center'
+            size_hint: 1, 1
+    
+            MDBoxLayout:
+                spacing: '16dp'
+                orientation: 'vertical'
+                halign: 'center'
+                size_hint: 1, 1
+                
+                
+
+
+            MDBoxLayout:
+                size_hint: 1, .5
+
+            MDRaisedButton:
+                size_hint_x: 1
+                size_hint_y: 0.2
+                halign: 'center'
+                text: "Aceitar"
+                md_bg_color: app.theme_cls.primary_color
+                on_release:
+                    root.manager.transition.direction = 'down'
+                    root.manager.current = 'menu'
+            MDRaisedButton:
+                size_hint_x: 1
+                size_hint_y: 0.2
+                halign: 'center'
+                text: "Cancelar"
+                md_bg_color: [1, 0, 0, 1]
+                on_release:
+                    root.manager.transition.direction = 'down'
+                    root.manager.current = 'menu'
+
+########################################################################
+
+<SplashScreen>:
+    MDScreen:
+        #Set screen name
+        name: "SplashScreen"
+        #init progress splash
+        on_enter: self.ids.progress.start()
+#   Conteiners
+        
+        Button:
+            on_press: root.manager.current = 'menu'
+
+        MDBoxLayout:
+            Image:
+                source:'assets/bk.png'
+                size: self.size
+
+        MDFloatLayout:
+            
+            Image:
+                source:'assets/icon.png'
+            MDLabel:
+                halign: 'center'
+                pos_hint: {'center_x': 0.5,'center_y': 0.4}
+                text: "Clique para iniciar"
+                color: 1,1,1,1
+
+
+###############################################################################
