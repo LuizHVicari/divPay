@@ -1,0 +1,104 @@
+<Gerenciador>:
+    Screen:
+        Button:
+            on_press: root.current = 'addConta'
+
+        MDBoxLayout:
+            Image:
+                source:'assets/bk.png'
+                size: self.size
+
+        MDFloatLayout:
+            
+            Image:
+                source:'assets/icon.png'
+            MDLabel:
+                halign: 'center'
+                pos_hint: {'center_x': 0.5,'center_y': 0.4}
+                text: "Clique para iniciar"
+                color: 1,1,1,1
+
+
+    AddConta:
+        name: 'addConta'
+
+<AddConta>:
+    MDBoxLayout:
+        inputNomeBill: txt_1.text
+        #listaValores: spinner_1.values
+        #valorInicial: spinner_1.text
+        
+        orientation: 'vertical'
+        
+        Label:
+            text: 'Adicionar Conta'
+            font_size: '40sp'
+            bold: True
+            color: [0,0,1,1]
+            height: '32dp'
+            size_hint: (1,0.15)
+            
+        # Button:
+        #     on_press: root.atualiza_spinner()
+        #     text: 'Pressione aqui para alterar os valores do Spinner'
+        #     id: but_2
+        #     size_hint: [0.5,None]
+        #     pos_hint: {'x' : .25}
+        #     height: '32dp'
+            
+        GridLayout:
+            cols: 1
+            spacing: 20
+            padding: [20,20]
+            
+            TextInput:
+                id: txt_1
+                text: root.inputNomeBill
+                size_hint: [0.5,None]
+                height: '32dp'
+            
+            Button:
+                on_press: root.show_date_picker()
+                text: 'Data'
+                id: but_1
+                size_hint: [1,None]
+                height: '32dp'
+                background_color: [0,0,1,1]
+
+            # Spinner:
+            #     id: spinner_1
+            #     text: root.valorInicial
+            #     values: root.listaValores
+            #     size_hint: [0.5,None]
+            #     height: '32dp'
+            #     on_text: root.inputNomeBill = self.text
+            
+
+
+            ScrollView:
+                MDList:
+                    id: container
+            
+            GridLayout:
+                cols: 2
+                spacing: 20
+                padding: [20,20]
+
+                Button:
+                    on_press: root.print_txt()
+                    text: 'Adicionar'
+                    id: but_1
+                    size_hint: [1,None]
+                    height: '32dp'
+                    background_color: [0,1,1,1]
+                    text_color: [1,1,1,1]
+                    
+
+                Button:
+                    on_press: root.print_txt()
+                    text: 'Cancelar'
+                    id: but_1
+                    size_hint: [1,None]
+                    height: '32dp'
+                    background_color: [1,0,0,1]
+

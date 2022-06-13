@@ -5,8 +5,10 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 
 from kivy.metrics import dp
 
-from kivymd.uix.datatables import MDDataTable
-from kivymd.uix.boxlayout import MDBoxLayout
+from kivy.uix.boxlayout import BoxLayout
+from kivy.properties import ObjectProperty
+from kivy.uix.listview import ListItemButton
+
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.menu import MDDropdownMenu
@@ -57,7 +59,22 @@ class AddMemberScreen(Screen):
 ###############################################################################
 
 # utils
-class inputAdd(Screen):
+class Bill(BoxLayout):
+    name_bill = ObjectProperty(None)
+    date_bill = ObjectProperty(None)
+    member_list = ObjectProperty(None)
+
+    def submit_bill(self):
+        pass
+
+    def delete_bill(self):
+        pass
+
+    def edit_bill(self):
+        pass
+
+
+
     pass
 
 
