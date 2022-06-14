@@ -3,6 +3,7 @@
  
 from datetime import datetime
 from operator import ge
+
 import kivy
 kivy.require('1.8.0')
  
@@ -21,7 +22,29 @@ from kivymd.uix.list import ThreeLineListItem
 
 class Gerenciador(ScreenManager):
     pass
+
+
+
+class NumMembros(Screen):
+    inputNumeroDeMembros = StringProperty()
+    inputNumeroDeMembrosInicial = StringProperty()
+    listaValores= ObjectProperty()
+
+    
+    def __init__(self, **kwargs):
+        super(NumMembros, self).__init__(**kwargs)
+        self.inputNumeroDeMembrosInicial = "2"
+        self.listaValores= ["2", "3", "4", "5", "6", "7", "8", "9", "10"]
  
+
+    def on_inputNumeroDeMembros(self, value):
+        for i in range( value ):
+            AddConta.ids.container.add_widget( ThreeLineListItem( text=f"Membro {i}",on_release= lambda x:print("click"), secondary_text="Peso 10", tertiary_text="R$ 10,00"))
+
+
+
+
+
 class AddConta(Screen):
     inputNomeBill = StringProperty()
     inputDateBill = ObjectProperty()
@@ -30,14 +53,7 @@ class AddConta(Screen):
     valorInicial= StringProperty()
 
 
-    def on_start(self):
-        Membros = [("Membro 1", "Part 1", "Valor 1"), ("Membro 2", "Part 2", "Valor 2"), ("Membro 3", "Part 3", "Valor 3"), ("Membro 4", "Part 4", "Valor 4")]
 
-        print("aaaaaaaaaaaaaaaaa\naaaaaaaaaaa\n")
-        for membro in Membros:
-            self.root.ids.container.add_widget( ThreeLineListItem( text=f"{Membros[membro][0]}",on_release= lambda x:print("click"), secondary_text=f"{Membros[membro][1]}", tertiary_text=f"{Membros[membro][2]}"))
-        
- 
     def __init__(self, **kwargs):
         super(AddConta, self).__init__(**kwargs)
         self.inputNomeBill = datetime.today().strftime('%d de %B')
@@ -45,12 +61,14 @@ class AddConta(Screen):
         
         self.listaValores= ["Opção A", "Opção B", "Opção C", "Opção D"]
         self.valorInicial= datetime.today().strftime('%d of %B')
+
         
         
+        
 
 
 
-
+        
 
     def atualiza_spinner(self):
         self.listaValores= ["Opção W", "Opção X", "Opção Y", "Opção Z"]
@@ -78,18 +96,33 @@ class AddConta(Screen):
         date_dialog.bind(on_save=self.on_save, on_cancel=self.on_cancel)
         date_dialog.open()
 
+        
 
+
+class Home(Screen):
+
+    pass
 
 
 class MeuProgramaApp(MDApp):
     def build(self):
 
-
-
         return Gerenciador()
 
+    def on_start(self):
+        
+        print(self.root.get_screen('addConta'))
+        print(self.root)
+        print(self)
+        print(AddConta) 
 
-    
+        for i in range(3):
+            self.root.get_screen('addConta').ids.container.add_widget( ThreeLineListItem( text=f"Membro {i}",on_release= lambda x:print("click"), secondary_text="Peso 10", tertiary_text="R$ 10,00"))
+            
+            
+            print(f"1:  {self.root.get_screen('addConta').ids.container.children}")
+
+
 
 
 
