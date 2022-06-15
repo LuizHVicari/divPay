@@ -58,21 +58,25 @@ class Gerenciador(ScreenManager):
 
 
 class Content(BoxLayout):
-    inputNome = StringProperty()
-    inputPart = StringProperty()
-    inputContr = StringProperty()
-    inputNomeIni = StringProperty()
-    inputPartIni = StringProperty()
-    inputContrIni = StringProperty()
+    inputNome = ObjectProperty()
+    inputPart = ObjectProperty()
+    inputContr = ObjectProperty()
+    inputNomeIni = ObjectProperty()
+    inputPartIni = ObjectProperty()
+    inputContrIni = ObjectProperty()
 
     def __init__(self, **kwargs):
         super(Content, self).__init__(**kwargs)
-        self.inputNomeIni = "Nome"
-        self.inputPartIni = "Participação"
-        self.inputContrIni = "Contribuição"
+        #self.inputNomeIni = "Nome"
+        #self.inputPartIni = "Participação"
+        #self.inputContrIni = "Contribuição"
 
+    def on_click_button(self):
+        print("click")
+        print(self.inputNome.text)
+        print(self.inputPart.text)
+        print(self.inputContr.text)
 
-    
 
     
     
@@ -125,14 +129,13 @@ class AddConta(Screen):
                         text="OK",
                         theme_text_color="Custom",
                         text_color=[0, 0, 0, 1],
-                        #on_release=lambda x: self.on_inputNomeBill(self.dialog, self.dialog.ids.inputNome.text),
+                        on_release=lambda x: Content.on_click_button(self.dialog.content_cls),
                     ),
                 ],
             )
         self.dialog.open()
     
-    # def on_inputNomeBill(self, value):
-        # print(value)
+
 
 
 
