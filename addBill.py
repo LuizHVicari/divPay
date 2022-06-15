@@ -3,10 +3,13 @@
  
 from datetime import datetime
 from operator import ge
+from turtle import onclick
+from xml.dom.minidom import Childless
 
 import kivy
 kivy.require('1.8.0')
- 
+
+from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import StringProperty, ObjectProperty
@@ -15,6 +18,10 @@ from kivy.uix.dropdown import DropDown
 from kivy.properties import ListProperty
 from kivy.core.window import Window
 from kivymd.uix.picker import MDDatePicker
+from kivymd.uix.button import MDFlatButton
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.textfield import MDTextField
+from kivymd.uix.boxlayout import MDBoxLayout
 
 from kivymd.uix.list import ThreeLineListItem
 
@@ -25,21 +32,50 @@ class Gerenciador(ScreenManager):
 
 
 
-class NumMembros(Screen):
-    inputNumeroDeMembros = StringProperty()
-    inputNumeroDeMembrosInicial = StringProperty()
-    listaValores= ObjectProperty()
+# class NumMembros(Screen):
+#     inputNumeroDeMembros = ObjectProperty()
+#     inputNumeroDeMembrosInicial = ObjectProperty()
+#     listaValores= ObjectProperty()
 
     
-    def __init__(self, **kwargs):
-        super(NumMembros, self).__init__(**kwargs)
-        self.inputNumeroDeMembrosInicial = "2"
-        self.listaValores= ["2", "3", "4", "5", "6", "7", "8", "9", "10"]
+#     def __init__(self, **kwargs):
+#         super(NumMembros, self).__init__(**kwargs)
+#         self.inputNumeroDeMembrosInicial = "2"
+#         self.listaValores= ["2", "3", "4", "5", "6", "7", "8", "9", "10"]
  
 
-    def on_inputNumeroDeMembros(self, value):
-        for i in range( value ):
-            AddConta.ids.container.add_widget( ThreeLineListItem( text=f"Membro {i}",on_release= lambda x:print("click"), secondary_text="Peso 10", tertiary_text="R$ 10,00"))
+#     def on_inputNumeroDeMembros(self, value):
+#         print(value)
+#         print("aa")
+#         #for i in range( int(value) ):
+#         #    AddConta.ids.container.add_widget( ThreeLineListItem( text=f"Membro {i}",on_release= lambda x:print("click"), secondary_text="Peso 10", tertiary_text="R$ 10,00"))
+
+
+# name : str, members : dict, value : float, day : int, month : int, year : int
+
+
+
+
+
+class Content(BoxLayout):
+    inputNome = StringProperty()
+    inputPart = StringProperty()
+    inputContr = StringProperty()
+    inputNomeIni = StringProperty()
+    inputPartIni = StringProperty()
+    inputContrIni = StringProperty()
+
+    def __init__(self, **kwargs):
+        super(Content, self).__init__(**kwargs)
+        self.inputNomeIni = "Nome"
+        self.inputPartIni = "Participação"
+        self.inputContrIni = "Contribuição"
+
+
+    
+
+    
+    
 
 
 
@@ -58,25 +94,48 @@ class AddConta(Screen):
         super(AddConta, self).__init__(**kwargs)
         self.inputNomeBill = datetime.today().strftime('%d de %B')
         self.inputDateBill = datetime.today().strftime('%Y-%m-%d')
-        
         self.listaValores= ["Opção A", "Opção B", "Opção C", "Opção D"]
         self.valorInicial= datetime.today().strftime('%d of %B')
 
-        
-        
-        
+
+
+    def print_txt(self, value, **kwargs):
+        self.inputNomeBill = value
+        print(value)
+        print(kwargs)
 
 
 
-        
+    dialog = None
+    def show_confirmation_dialog(self):
+        if not self.dialog:
+            self.dialog = MDDialog(
+                title=" ",
+                type="custom",
+                content_cls= Content(),
+                buttons=[
+                    MDFlatButton(
+                        text="CANCEL",
+                        theme_text_color="Custom",
+                        text_color=[0, 0, 0, 1],
+                        on_release=lambda x: self.dialog.dismiss(),
 
-    def atualiza_spinner(self):
-        self.listaValores= ["Opção W", "Opção X", "Opção Y", "Opção Z"]
-        self.valorInicial= "Opção W"
- 
-    def print_txt(self):
-        print(self.inputNomeBill)
-        print(self.inputDateBill)
+                    ),
+                    MDFlatButton(
+                        text="OK",
+                        theme_text_color="Custom",
+                        text_color=[0, 0, 0, 1],
+                        #on_release=lambda x: self.on_inputNomeBill(self.dialog, self.dialog.ids.inputNome.text),
+                    ),
+                ],
+            )
+        self.dialog.open()
+    
+    # def on_inputNomeBill(self, value):
+        # print(value)
+
+
+
 
 
 
@@ -109,18 +168,13 @@ class MeuProgramaApp(MDApp):
 
         return Gerenciador()
 
-    def on_start(self):
-        
-        print(self.root.get_screen('addConta'))
-        print(self.root)
-        print(self)
-        print(AddConta) 
 
-        for i in range(3):
-            self.root.get_screen('addConta').ids.container.add_widget( ThreeLineListItem( text=f"Membro {i}",on_release= lambda x:print("click"), secondary_text="Peso 10", tertiary_text="R$ 10,00"))
+
+        #for i in range(3):
+        #    self.root.get_screen('addConta').ids.container.add_widget( ThreeLineListItem( text=f"Membro {i}",on_release= lambda x:print("click"), secondary_text="Peso 10", tertiary_text="R$ 10,00"))
+        #    print(f"1:  {self.root.get_screen('addConta').ids.container.children}")
             
             
-            print(f"1:  {self.root.get_screen('addConta').ids.container.children}")
 
 
 

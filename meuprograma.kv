@@ -22,13 +22,41 @@
     AddConta:
         name: 'addConta'
 
-    NumMembros:
-        name: 'numMembros'
+    # NumMembros:
+    #     name: 'numMembros'
 
     Home:
         name: 'home'
 
 
+########################################################################################
+#componentes
+<Content>:
+    orientation: "vertical"
+    spacing: "12dp"
+    size_hint_y: None
+    height: "120dp"
+
+    MDTextField:
+        id: text_editarMembro
+        hint_text: "Membro"
+
+    MDTextField:
+        id: text_editarPart
+        hint_text: "Participação"
+    
+    MDTextField:
+        id: text_editarContr
+        hint_text: "Contribuição"
+
+
+
+
+
+
+
+########################################################################################
+#Screens
 <Home>:
     orientation: 'vertical'
     ScrollView:
@@ -36,7 +64,7 @@
             size_hint: [1,0.1]
             id: contas
     Button:
-        on_press: root.manager.current = 'numMembros'
+        on_press: root.manager.current = 'addConta'
         text: 'Adicionar Conta'
         id: but_3
         size_hint: [1,0.1]
@@ -44,54 +72,8 @@
         background_color: [0,0,1,1]
         
 
-<NumMembros>:
-    MDBoxLayout:
-        inputNumeroDeMembros: spinner_1.text
-        listaValores: spinner_1.values
-        #valorInicial: spinner_1.text
-
-        orientation: 'vertical'
-        halign: 'center'
-        spacing: '24dp'
-
-        Label:
-            text: 'Insira o número de membros'
-            font_size: '20sp'
-            bold: True
-            color: [0,0,1,1]
-            height: '32dp'
-            size_hint: (1,0.15)
-
-        # TextInput:
-        #     id: txt_2
-        #     text: root.inputNumeroDeMembros
-        #     size_hint: [0.5,0.1]
-        #     pos_hint: {'center_x': 0.5,'center_y': 0.5}
-        #     height: '32dp'
-
-        Spinner:
-            id: spinner_1
-            text: root.inputNumeroDeMembrosInicial
-            values: root.listaValores
-            size_hint: [0.5,None]
-            pos_hint: {'center_x': 0.5,'center_y': 0.5}
-            height: '32dp'
-            on_text: 
-                root.inputNumeroDeMembros = self.text
-
-        Button:
-            on_press: 
-                #root.on_inputNumeroDeMembros(int(spinner_1.text))
-                root.manager.current = 'addConta'
-            text: 'Concluído'
-            id: but_4
-            size_hint: [1,0.1]
-            height: '32dp'
-            background_color: [0,1,1,1]
-            text_color: [1,1,1,1]
 
 
-        
 
 
 <AddConta>:
@@ -150,6 +132,12 @@
             ScrollView:
                 MDList:
                     id: container
+
+
+            MDFlatButton:
+                text: "Editar Membro"
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                on_release: root.show_confirmation_dialog()
             
             GridLayout:
                 cols: 2
@@ -157,7 +145,7 @@
                 padding: [20,20]
 
                 Button:
-                    on_press: root.print_txt()
+                    on_press: root.print_txt(root.ids.txt_1.text)
                     text: 'Adicionar'
                     id: but_1
                     size_hint: [1,None]
@@ -167,7 +155,7 @@
                     
 
                 Button:
-                    on_press: root.print_txt()
+                    on_press: root.manager.current = 'home'
                     text: 'Cancelar'
                     id: but_2
                     size_hint: [1,None]
