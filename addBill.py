@@ -61,15 +61,42 @@ class Content(BoxLayout):
     inputNome = ObjectProperty()
     inputPart = ObjectProperty()
     inputContr = ObjectProperty()
-    inputNomeIni = ObjectProperty()
-    inputPartIni = ObjectProperty()
-    inputContrIni = ObjectProperty()
+    inputNomeIni = StringProperty()
+    inputPartIni = StringProperty()
+    inputContrIni = StringProperty()
 
     def __init__(self, **kwargs):
         super(Content, self).__init__(**kwargs)
-        #self.inputNomeIni = "Nome"
-        #self.inputPartIni = "Participação"
-        #self.inputContrIni = "Contribuição"
+        self.inputNomeIni = "Nome"
+        self.inputPartIni = "Participação"
+        self.inputContrIni = "Contribuição"
+
+
+    dialog = None
+    def show_confirmation_dialog(self):
+        if not self.dialog:
+            self.dialog = MDDialog(
+                title=" ",
+                type="custom",
+                content_cls= Content(),
+                buttons=[
+                    MDFlatButton(
+                        text="CANCEL",
+                        theme_text_color="Custom",
+                        text_color=[0, 0, 0, 1],
+                        on_release=lambda x: self.dialog.dismiss(),
+
+                    ),
+                    MDFlatButton(
+                        text="OK",
+                        theme_text_color="Custom",
+                        text_color=[0, 0, 0, 1],
+                        on_release=lambda x: self.on_click_button(self.dialog.content_cls),
+                    ),
+                ],
+            )
+        self.dialog.open()
+
 
     def on_click_button(self):
         print("click")
@@ -110,30 +137,8 @@ class AddConta(Screen):
 
 
 
-    dialog = None
-    def show_confirmation_dialog(self):
-        if not self.dialog:
-            self.dialog = MDDialog(
-                title=" ",
-                type="custom",
-                content_cls= Content(),
-                buttons=[
-                    MDFlatButton(
-                        text="CANCEL",
-                        theme_text_color="Custom",
-                        text_color=[0, 0, 0, 1],
-                        on_release=lambda x: self.dialog.dismiss(),
-
-                    ),
-                    MDFlatButton(
-                        text="OK",
-                        theme_text_color="Custom",
-                        text_color=[0, 0, 0, 1],
-                        on_release=lambda x: Content.on_click_button(self.dialog.content_cls),
-                    ),
-                ],
-            )
-        self.dialog.open()
+    def show_dialog(self):
+        Content.show_confirmation_dialog(Content)
     
 
 

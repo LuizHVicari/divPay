@@ -32,9 +32,9 @@
 ########################################################################################
 #componentes
 <Content>:
-    inputNomeIni:text_editarMembro
-    inputPartIni:text_editarPart
-    inputContrIni:text_editarContr
+    inputNome:text_editarMembro
+    inputPart:text_editarPart
+    inputContr:text_editarContr
     
     orientation: "vertical"
     spacing: "12dp"
@@ -43,6 +43,7 @@
 
     MDTextField:
         id: text_editarMembro
+        text:root.inputNomeIni
         hint_text: "Membro"
 
     MDTextField:
@@ -141,7 +142,7 @@
             MDFlatButton:
                 text: "Editar Membro"
                 pos_hint: {'center_x': .5, 'center_y': .5}
-                on_release: root.show_confirmation_dialog()
+                on_release: root.show_dialog()
             
             GridLayout:
                 cols: 2
