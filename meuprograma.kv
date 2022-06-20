@@ -48,10 +48,12 @@
 
     MDTextField:
         id: text_editarPart
+        text:root.inputPartIni
         hint_text: "Participação"
     
     MDTextField:
         id: text_editarContr
+        text:root.inputContrIni
         hint_text: "Contribuição"
 
 
@@ -69,7 +71,8 @@
             size_hint: [1,0.1]
             id: contas
     Button:
-        on_press: root.manager.current = 'addConta'
+        on_press:
+            root.manager.current = 'addConta'
         text: 'Adicionar Conta'
         id: but_3
         size_hint: [1,0.1]

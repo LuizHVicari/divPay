@@ -65,11 +65,11 @@ class Content(BoxLayout):
     inputPartIni = StringProperty()
     inputContrIni = StringProperty()
 
-    def __init__(self, **kwargs):
-        super(Content, self).__init__(**kwargs)
-        self.inputNomeIni = "Nome"
-        self.inputPartIni = "Participação"
-        self.inputContrIni = "Contribuição"
+    #def __init__(self, **kwargs):
+        #super(Content, self).__init__(**kwargs)
+        #self.inputNomeIni = self.nome
+        #self.inputPartIni = self.part
+        #self.inputContrIni = self.contr
 
 
     dialog = None
@@ -97,15 +97,15 @@ class Content(BoxLayout):
             )
         self.dialog.open()
 
-
     def on_click_button(self):
         print("click")
         print(self.inputNome.text)
         print(self.inputPart.text)
         print(self.inputContr.text)
+        self.dialog.dismiss()
 
 
-    
+
     
 
 
@@ -122,11 +122,14 @@ class AddConta(Screen):
 
 
     def __init__(self, **kwargs):
-        super(AddConta, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.inputNomeBill = datetime.today().strftime('%d de %B')
         self.inputDateBill = datetime.today().strftime('%Y-%m-%d')
         self.listaValores= ["Opção A", "Opção B", "Opção C", "Opção D"]
         self.valorInicial= datetime.today().strftime('%d of %B')
+        
+        #for i in range( 3 ):
+        #    self.ids.container.add_widget( ThreeLineListItem( text=f"Membro {i}",on_release= lambda x:print("click"), secondary_text="Peso 10", tertiary_text="R$ 10,00"))
 
 
 
@@ -135,11 +138,10 @@ class AddConta(Screen):
         print(value)
         print(kwargs)
 
-
-
     def show_dialog(self):
         Content.show_confirmation_dialog(Content)
-    
+
+
 
 
 
@@ -169,6 +171,7 @@ class AddConta(Screen):
 class Home(Screen):
 
     pass
+
 
 
 class MeuProgramaApp(MDApp):
