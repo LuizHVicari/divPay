@@ -72,6 +72,7 @@
             id: contas
     Button:
         on_press:
+            root.on_click_add()
             root.manager.current = 'addConta'
         text: 'Adicionar Conta'
         id: but_3
@@ -89,7 +90,8 @@
         inputNomeBill: txt_1.text
         #listaValores: spinner_1.values
         #valorInicial: spinner_1.text
-        
+        size_hint: 1, 1
+        halign: 'center'
         orientation: 'vertical'
         
         Label:
@@ -99,6 +101,7 @@
             color: [0,0,1,1]
             height: '32dp'
             size_hint: (1,0.15)
+
             
         # Button:
         #     on_press: root.atualiza_spinner()
@@ -111,7 +114,8 @@
         GridLayout:
             cols: 1
             spacing: 20
-            padding: [20,20]
+            padding: [20,0]
+            size_hint: 1, 0.85
             
             TextInput:
                 id: txt_1
@@ -138,6 +142,7 @@
 
 
             ScrollView:
+                size_hint: 1, 0.85
                 MDList:
                     id: container
 
@@ -150,7 +155,7 @@
             GridLayout:
                 cols: 2
                 spacing: 20
-                padding: [20,20]
+                
 
                 Button:
                     on_press: root.print_txt(root.ids.txt_1.text)
@@ -163,7 +168,9 @@
                     
 
                 Button:
-                    on_press: root.manager.current = 'home'
+                    on_press:
+                        root.on_return()
+                        root.manager.current = 'home'
                     text: 'Cancelar'
                     id: but_2
                     size_hint: [1,None]

@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
  
+from asyncio.windows_events import NULL
 from datetime import datetime
 from operator import ge
+from pydoc import text
 from turtle import onclick
 from xml.dom.minidom import Childless
 
@@ -25,7 +27,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 
 from kivymd.uix.list import ThreeLineListItem
 
-
+Builder.load_file("meuprograma.kv")
 
 class Gerenciador(ScreenManager):
     pass
@@ -98,7 +100,7 @@ class Content(BoxLayout):
         self.dialog.open()
 
     def on_click_button(self):
-        print("click")
+        
         print(self.inputNome.text)
         print(self.inputPart.text)
         print(self.inputContr.text)
@@ -128,8 +130,9 @@ class AddConta(Screen):
         self.listaValores= ["Opção A", "Opção B", "Opção C", "Opção D"]
         self.valorInicial= datetime.today().strftime('%d of %B')
         
-        #for i in range( 3 ):
-        #    self.ids.container.add_widget( ThreeLineListItem( text=f"Membro {i}",on_release= lambda x:print("click"), secondary_text="Peso 10", tertiary_text="R$ 10,00"))
+        
+        
+        #self.ids.container.add_widget( ThreeLineListItem( text=f"Membro {i}",on_release= lambda x:print("click"), secondary_text="Peso 10", tertiary_text="R$ 10,00"))
 
 
 
@@ -138,11 +141,12 @@ class AddConta(Screen):
         print(value)
         print(kwargs)
 
-    def show_dialog(self):
+    def show_dialog(self, ):
         Content.show_confirmation_dialog(Content)
 
 
-
+    def on_return(self):
+        self.manager.get_screen('addConta').ids.container.clear_widgets()
 
 
 
@@ -170,7 +174,8 @@ class AddConta(Screen):
 
 class Home(Screen):
 
-    pass
+    def on_click_add(self):
+        self.manager.get_screen('addConta').ids.container.add_widget( ThreeLineListItem( text=f"Membro",on_release= lambda x:AddConta.show_dialog(self), secondary_text="Peso 10", tertiary_text="R$ 10,00"))
 
 
 
