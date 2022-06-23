@@ -3,7 +3,8 @@
  
 from asyncio.windows_events import NULL
 from datetime import datetime
-from operator import ge
+from mailbox import NotEmptyError
+from operator import contains, ge
 from pydoc import text
 from turtle import onclick
 from xml.dom.minidom import Childless
@@ -25,9 +26,20 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.boxlayout import MDBoxLayout
 
+import uuid
+
 from kivymd.uix.list import ThreeLineListItem
 
+
+#global contas
+#contas = list(Bill('Conta', ''))
+
+
+
 Builder.load_file("meuprograma.kv")
+
+
+
 
 class Gerenciador(ScreenManager):
     pass
@@ -75,7 +87,7 @@ class Content(BoxLayout):
 
 
     dialog = None
-    def show_confirmation_dialog(self):
+    def show_confirmation_dialog(self, addscreen):
         if not self.dialog:
             self.dialog = MDDialog(
                 title=" ",
@@ -93,19 +105,19 @@ class Content(BoxLayout):
                         text="OK",
                         theme_text_color="Custom",
                         text_color=[0, 0, 0, 1],
-                        on_release=lambda x: self.on_click_button(self.dialog.content_cls),
+                        on_release=lambda x: self.on_click_button(self.dialog.content_cls, addscreen),
                     ),
                 ],
             )
         self.dialog.open()
 
-    def on_click_button(self):
+    def on_click_button(self, addscreen):
         
         print(self.inputNome.text)
         print(self.inputPart.text)
         print(self.inputContr.text)
         self.dialog.dismiss()
-
+        AddConta.add_member(addscreen, self.inputNome.text, self.inputPart.text, self.inputContr.text)
 
 
     
@@ -138,16 +150,38 @@ class AddConta(Screen):
 
     def print_txt(self, value, **kwargs):
         self.inputNomeBill = value
-        print(value)
-        print(kwargs)
 
-    def show_dialog(self, ):
-        Content.show_confirmation_dialog(Content)
+        listaMembers = list()
+        for membro in self.manager.get_screen('addConta').ids.container.children:
+            listaMembers.append( (membro.text ,membro.secondary_text ,membro.tertiary_text ) )
+        
+
+        print(self.inputNomeBill)
+        print(self.inputDateBill)
+        print(listaMembers)
+
+        Home.add_conta(self, self.inputNomeBill, self.inputDateBill)
+
+
+
+    def show_dialog(self):
+        print(self)
+        Content.show_confirmation_dialog(Content, self)
 
 
     def on_return(self):
+        print(1)
         self.manager.get_screen('addConta').ids.container.clear_widgets()
 
+
+
+    def add_member(self, Nome='Membro', Part='10', Contrib='10'):
+        self.manager.get_screen('addConta').ids.container.add_widget( 
+            ThreeLineListItem( 
+                #TODO on_release= lambda x: AddConta.show_dialog(self), 
+                text= Nome,
+                secondary_text= f'{Part}', 
+                tertiary_text= f'{Contrib}'))
 
 
 
@@ -174,9 +208,13 @@ class AddConta(Screen):
 
 class Home(Screen):
 
-    def on_click_add(self):
-        self.manager.get_screen('addConta').ids.container.add_widget( ThreeLineListItem( text=f"Membro",on_release= lambda x:AddConta.show_dialog(self), secondary_text="Peso 10", tertiary_text="R$ 10,00"))
-
+    def add_conta(self, nome, data):
+        self.manager.get_screen('home').ids.contas.add_widget( 
+                ThreeLineListItem( 
+                    #TODO on_release= lambda x: AddConta.show_dialog(self), 
+                    text= nome,
+                    secondary_text= f'{data}'))
+    
 
 
 class MeuProgramaApp(MDApp):
@@ -191,8 +229,6 @@ class MeuProgramaApp(MDApp):
         #    print(f"1:  {self.root.get_screen('addConta').ids.container.children}")
             
             
-
-
 
 
 

@@ -68,11 +68,11 @@
     orientation: 'vertical'
     ScrollView:
         MDList:
-            size_hint: [1,0.1]
+            size_hint: [1,1]
             id: contas
     Button:
         on_press:
-            root.on_click_add()
+            
             root.manager.current = 'addConta'
         text: 'Adicionar Conta'
         id: but_3
@@ -86,7 +86,7 @@
 
 
 <AddConta>:
-    MDBoxLayout:
+    BoxLayout:
         inputNomeBill: txt_1.text
         #listaValores: spinner_1.values
         #valorInicial: spinner_1.text
@@ -115,7 +115,7 @@
             cols: 1
             spacing: 20
             padding: [20,0]
-            size_hint: 1, 0.85
+            
             
             TextInput:
                 id: txt_1
@@ -147,10 +147,16 @@
                     id: container
 
 
-            MDFlatButton:
-                text: "Editar Membro"
+            Button:
+                text: "Adicionar Membro"
                 pos_hint: {'center_x': .5, 'center_y': .5}
-                on_release: root.show_dialog()
+                size_hint: [1,None]
+                height: '32dp'
+                background_color: [1,1,1,1]
+                text_color: [0,0,0,1]
+                on_release: 
+                    root.show_dialog()
+                    root.manager.current = 'addConta'
             
             GridLayout:
                 cols: 2
@@ -158,7 +164,9 @@
                 
 
                 Button:
-                    on_press: root.print_txt(root.ids.txt_1.text)
+                    on_press: 
+                        root.print_txt(root.ids.txt_1.text)
+                        root.manager.current = 'home'
                     text: 'Adicionar'
                     id: but_1
                     size_hint: [1,None]
