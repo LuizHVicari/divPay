@@ -1,6 +1,6 @@
 from datetime import date
-from billClass import Bill
-import functions
+#from billClass import Bill
+#import functions
 
 def create_new_bill(name : str, members : list, participation : list, payments : list, day : int, month : int, year : int):
     '''
