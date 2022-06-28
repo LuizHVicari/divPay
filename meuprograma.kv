@@ -28,9 +28,18 @@
     Home:
         name: 'home'
 
+    Sugestao:
+        name: 'sugestao'
+
 
 ########################################################################################
 #componentes
+
+
+
+
+
+
 <Content>:
     inputNome:text_editarMembro
     inputPart:text_editarPart
@@ -43,18 +52,25 @@
 
     MDTextField:
         id: text_editarMembro
-        text:root.inputNomeIni
+        text:""
         hint_text: "Membro"
+
+
+
 
     MDTextField:
         id: text_editarPart
-        text:root.inputPartIni
+        text:""
         hint_text: "Participação"
-    
+
+
+
     MDTextField:
         id: text_editarContr
-        text:root.inputContrIni
+        text:""
         hint_text: "Contribuição"
+
+
 
 
 
@@ -65,20 +81,37 @@
 ########################################################################################
 #Screens
 <Home>:
-    orientation: 'vertical'
-    ScrollView:
-        MDList:
-            size_hint: [1,1]
-            id: contas
-    Button:
-        on_press:
+    BoxLayout:
+        orientation: 'vertical'
+        halign:"center"
+        spacing: 10
+        padding: ('20dp', '20dp', '20dp', '20dp')
+
+        Label:
+            text: 'Suas Contas'
+            font_family: "Roboto"
+            font_size: '40sp'
+            bold: True
+            color: [0,0,1,1]
+            height: '32dp'
+            size_hint: (1,None)
             
-            root.manager.current = 'addConta'
-        text: 'Adicionar Conta'
-        id: but_3
-        size_hint: [1,0.1]
-        height: '32dp'
-        background_color: [0,0,1,1]
+        ScrollView:
+            MDList:
+                size_hint: [1,1]
+                id: contas
+                
+        Button:
+            on_press:
+                root.clear()
+                root.manager.current = 'addConta'
+            text: 'Adicionar Conta'
+            id: but_3
+            size_hint: [1,0.1]
+            height: '32dp'
+            background_color: [0,0,1,1]
+            
+            
         
 
 
@@ -86,41 +119,25 @@
 
 
 <AddConta>:
-    BoxLayout:
-        inputNomeBill: txt_1.text
-        #listaValores: spinner_1.values
-        #valorInicial: spinner_1.text
-        size_hint: 1, 1
-        halign: 'center'
-        orientation: 'vertical'
-        
-        Label:
-            text: 'Adicionar Conta'
-            font_size: '40sp'
-            bold: True
-            color: [0,0,1,1]
-            height: '32dp'
-            size_hint: (1,0.15)
 
-            
-        # Button:
-        #     on_press: root.atualiza_spinner()
-        #     text: 'Pressione aqui para alterar os valores do Spinner'
-        #     id: but_2
-        #     size_hint: [0.5,None]
-        #     pos_hint: {'x' : .25}
-        #     height: '32dp'
-            
-        GridLayout:
-            cols: 1
+    BoxLayout:
+        orientation:'vertical'
+        MDToolbar:
+            title: "Adicionar Conta"
+        
+        BoxLayout:
+            inputNomeBill: txt_1.text
+            orientation: 'vertical'
+            halign: "center"
             spacing: 20
-            padding: [20,0]
+            padding: ('20dp', '20dp', '20dp', '20dp')
+            
             
             
             TextInput:
                 id: txt_1
                 text: root.inputNomeBill
-                size_hint: [0.5,None]
+                size_hint: [1,None]
                 height: '32dp'
             
             Button:
@@ -131,57 +148,103 @@
                 height: '32dp'
                 background_color: [0,0,1,1]
 
-            # Spinner:
-            #     id: spinner_1
-            #     text: root.valorInicial
-            #     values: root.listaValores
-            #     size_hint: [0.5,None]
-            #     height: '32dp'
-            #     on_text: root.inputNomeBill = self.text
-            
-
-
             ScrollView:
-                size_hint: 1, 0.85
+                size_hint: 1, 1
                 MDList:
                     id: container
 
 
-            Button:
-                text: "Adicionar Membro"
-                pos_hint: {'center_x': .5, 'center_y': .5}
-                size_hint: [1,None]
-                height: '32dp'
-                background_color: [1,1,1,1]
-                text_color: [0,0,0,1]
-                on_release: 
-                    root.show_dialog()
-                    root.manager.current = 'addConta'
+
             
-            GridLayout:
-                cols: 2
-                spacing: 20
+            BoxLayout:
+
+                height: '80dp'
+                size_hint: [1,None]
+
+                orientation: 'vertical'
+                halign: "center"
+
                 
 
                 Button:
-                    on_press: 
-                        root.print_txt(root.ids.txt_1.text)
-                        root.manager.current = 'home'
-                    text: 'Adicionar'
-                    id: but_1
+                    text: "Adicionar Membro"
                     size_hint: [1,None]
                     height: '32dp'
-                    background_color: [0,1,1,1]
-                    text_color: [1,1,1,1]
+                    background_color: [1,1,1,1]
+                    text_color: [0,0,0,1]
+                    on_release: 
+                        root.show_dialog()
+                        root.manager.current = 'addConta'
+
+                BoxLayout:
+                    halign: "center"
+                    orientation: 'horizontal'
+                    spacing: 20
                     
 
-                Button:
-                    on_press:
-                        root.on_return()
-                        root.manager.current = 'home'
-                    text: 'Cancelar'
-                    id: but_2
-                    size_hint: [1,None]
-                    height: '32dp'
-                    background_color: [1,0,0,1]
+                    Button:
+                        on_press: 
+                            root.print_txt(root.ids.txt_1.text)
+                            
+                        text: 'Adicionar'
+                        id: but_1
+                        size_hint: [1,None]
+                        height: '32dp'
+                        background_color: [0,1,1,1]
+                        text_color: [1,1,1,1]
+                        
+
+                    Button:
+                        on_press:
+                            root.on_return()
+                            root.manager.current = 'home'
+                        text: 'Cancelar'
+                        id: but_2
+                        size_hint: [1,None]
+                        height: '32dp'
+                        background_color: [1,0,0,1]
+
+
+
+<Sugestao>:
+    BoxLayout:
+        orientation: 'vertical'
+        halign:"center"
+        spacing: 10
+        padding: ('20dp', '20dp', '20dp', '20dp')
+        
+        Label:
+            id: ContaSug
+            font_family: "Roboto"
+            font_size: '40sp'
+            bold: True
+            color: [0,0,1,1]
+            height: '32dp'
+            size_hint: (1,None)
+
+        Label:
+            text: 'Sugestão de pagamento'
+            font_family: "Roboto"
+            font_size: '20sp'
+            bold: True
+            color: [0,0,1,1]
+            height: '32dp'
+            size_hint: (1,None)
+            
+            
+
+        ScrollView:
+            size_hint: 1, 1
+            MDList:
+                id: sugestaoList
+
+        Button:
+            on_press:
+                root.on_return_sugestion()
+                root.manager.current = 'home'
+            text: 'Voltar'
+            id: but_return
+            size_hint: [1,None]
+            height: '32dp'
+            background_color: [0,0,1,1]
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
- 
+
+from utils.billClass import *
 from asyncio.windows_events import NULL
 from datetime import datetime
 from mailbox import NotEmptyError
@@ -8,6 +9,7 @@ from operator import contains, ge
 from pydoc import text
 from turtle import onclick
 from xml.dom.minidom import Childless
+import pickle
 
 import kivy
 kivy.require('1.8.0')
@@ -26,13 +28,10 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.boxlayout import MDBoxLayout
 
-import uuid
 
 from kivymd.uix.list import ThreeLineListItem
 
 
-#global contas
-#contas = list(Bill('Conta', ''))
 
 
 
@@ -44,25 +43,6 @@ Builder.load_file("meuprograma.kv")
 class Gerenciador(ScreenManager):
     pass
 
-
-
-# class NumMembros(Screen):
-#     inputNumeroDeMembros = ObjectProperty()
-#     inputNumeroDeMembrosInicial = ObjectProperty()
-#     listaValores= ObjectProperty()
-
-    
-#     def __init__(self, **kwargs):
-#         super(NumMembros, self).__init__(**kwargs)
-#         self.inputNumeroDeMembrosInicial = "2"
-#         self.listaValores= ["2", "3", "4", "5", "6", "7", "8", "9", "10"]
- 
-
-#     def on_inputNumeroDeMembros(self, value):
-#         print(value)
-#         print("aa")
-#         #for i in range( int(value) ):
-#         #    AddConta.ids.container.add_widget( ThreeLineListItem( text=f"Membro {i}",on_release= lambda x:print("click"), secondary_text="Peso 10", tertiary_text="R$ 10,00"))
 
 
 # name : str, members : dict, value : float, day : int, month : int, year : int
@@ -78,13 +58,6 @@ class Content(BoxLayout):
     inputNomeIni = StringProperty()
     inputPartIni = StringProperty()
     inputContrIni = StringProperty()
-
-    #def __init__(self, **kwargs):
-        #super(Content, self).__init__(**kwargs)
-        #self.inputNomeIni = self.nome
-        #self.inputPartIni = self.part
-        #self.inputContrIni = self.contr
-
 
     dialog = None
     def show_confirmation_dialog(self, addscreen):
@@ -116,11 +89,45 @@ class Content(BoxLayout):
         print(self.inputNome.text)
         print(self.inputPart.text)
         print(self.inputContr.text)
-        self.dialog.dismiss()
-        AddConta.add_member(addscreen, self.inputNome.text, self.inputPart.text, self.inputContr.text)
+
+        
+
+
+        if (self.inputNome.text and self.inputPart.text and self.inputContr.text):
+            if self.inputPart.text.isnumeric() :
+                if self.inputContr.text.isnumeric() :
+                    AddConta.add_member(addscreen, self.inputNome.text, self.inputPart.text, self.inputContr.text)
+                    self.dialog.dismiss()
+                else:
+                    self.dialog_validate = MDDialog(
+                        text="Contribuição deve ser um número inteiro",
+                        radius=[20, 20, 20, 20],
+                    )
+                    self.dialog_validate.open()
+            else:
+                self.dialog_validate = MDDialog(
+                    text="Participação deve ser um número inteiro",
+                    radius=[20, 20, 20, 20],
+                )
+                self.dialog_validate.open()
+
+
+        else:
+            self.dialog_validate = MDDialog(
+                text="Preencha todos os campos",
+                radius=[20, 20, 20, 20],
+            )
+            self.dialog_validate.open()
+
 
 
     
+class Sugestao(Screen):
+    
+
+    def on_return_sugestion(self):
+        self.manager.get_screen('sugestao').ids.ContaSug.text = ""
+        self.manager.get_screen('sugestao').ids.sugestaoList.clear_widgets()
 
 
 
@@ -141,26 +148,51 @@ class AddConta(Screen):
         self.inputDateBill = datetime.today().strftime('%Y-%m-%d')
         self.listaValores= ["Opção A", "Opção B", "Opção C", "Opção D"]
         self.valorInicial= datetime.today().strftime('%d of %B')
-        
-        
-        
-        #self.ids.container.add_widget( ThreeLineListItem( text=f"Membro {i}",on_release= lambda x:print("click"), secondary_text="Peso 10", tertiary_text="R$ 10,00"))
 
 
 
     def print_txt(self, value, **kwargs):
-        self.inputNomeBill = value
-
-        listaMembers = list()
-        for membro in self.manager.get_screen('addConta').ids.container.children:
-            listaMembers.append( (membro.text ,membro.secondary_text ,membro.tertiary_text ) )
+        keep = True
+        for conta in Contas:
+            if conta.name.lower() == value.lower():
+                keep = False
+                self.dialog_validateName = MDDialog(
+                    text="Já existe uma conta com esse nome",
+                    radius=[20, 20, 20, 20],
+                )
+                self.dialog_validateName.open()
         
 
-        print(self.inputNomeBill)
-        print(self.inputDateBill)
-        print(listaMembers)
+        
+        self.inputNomeBill = value
+        listaMembers = list()
+        listaPart = list()
+        listaContrib = list()
+        for membro in self.manager.get_screen('addConta').ids.container.children:
+            if membro.text in listaMembers:
+                membro.text += ' 1'
+            listaMembers.append(membro.text)
+            listaPart.append(membro.secondary_text)
+            listaContrib.append(membro.tertiary_text)
+        if len(listaMembers) <= 1:
+                keep = False
+                self.dialog_validateMembers = MDDialog(
+                    text="Deve haver mais de um membro por conta",
+                    radius=[20, 20, 20, 20],
+                )
+                self.dialog_validateMembers.open()
 
-        Home.add_conta(self, self.inputNomeBill, self.inputDateBill)
+        if type(self.inputDateBill) == str:
+            self.inputDateBill = datetime.today()
+            
+        if keep:
+            conta = create_new_bill(self.inputNomeBill, listaMembers, listaPart, listaContrib, self.inputDateBill.day, self.inputDateBill.month, self.inputDateBill.year)
+
+            Contas.append(conta)
+
+            Home.add_conta(self, self.inputNomeBill, self.inputDateBill)
+            self.manager.current = 'home'
+
 
 
 
@@ -208,13 +240,37 @@ class AddConta(Screen):
 
 class Home(Screen):
 
+
+
+
+
     def add_conta(self, nome, data):
         self.manager.get_screen('home').ids.contas.add_widget( 
                 ThreeLineListItem( 
                     #TODO on_release= lambda x: AddConta.show_dialog(self), 
                     text= nome,
-                    secondary_text= f'{data}'))
+                    secondary_text= f"{data.strftime('%Y-%m-%d')}",
+                    on_release=lambda x: Home.openSugestion(self, nome))),
     
+    def openSugestion(self, nome):
+        for conta in Contas:
+            if conta.name.lower() == nome.lower():
+                for sugestão in conta.how_to_pay:
+                    self.manager.get_screen('sugestao').ids.sugestaoList.add_widget( 
+                        ThreeLineListItem( 
+                            text= sugestão[0],
+                            secondary_text= f'Paga para {sugestão[1]}', 
+                            tertiary_text= f'R${sugestão[2]}'))
+
+
+
+
+        self.manager.get_screen('sugestao').ids.ContaSug.text = nome
+        self.manager.current = 'sugestao'
+
+
+    def clear(self):
+        self.manager.get_screen('addConta').ids.container.clear_widgets()
 
 
 class MeuProgramaApp(MDApp):
@@ -236,5 +292,7 @@ class MeuProgramaApp(MDApp):
 
  
 if __name__ == '__main__':
+    global Contas
+    Contas = list()
     Window.size = (360, 640)
     MeuProgramaApp().run()

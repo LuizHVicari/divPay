@@ -162,6 +162,151 @@ class Bill:
         '''
         @return a string with the information of the bill
         '''
-        return [self.name, self.members, self.value, self.payments,self.day, self.month, self.year]
+        return [self.name, self.members, self.value, self.payments, self.day, self.month, self.year]
 
-        
+###########################################################################################################################
+
+from datetime import date
+
+def create_new_bill(name : str, members : list, participation : list, payments : list, day : int, month : int, year : int):
+    '''
+    Creates a new bill
+    @param name: name of the bill
+    @param members: list of members
+    @param participation: list of participation values
+    @param payments: list of payments
+    @return a new Bill object if it was succesfull, False otherwise
+    '''
+    aux_member = list()
+    value = 0
+
+    # Validates the name
+    if len(name) >= 0 and len(name) < 50:
+        name = name.strip()
+        name = name.lower()
+        name = name.capitalize()
+    
+    else:
+        print(1)
+        return False
+
+    for member in members:
+        if members.count(member) == 1:
+            pass
+        else:
+            print(2)
+            return False
+    
+    # Validates the members and their participation
+    if len(members) == len(participation) and len(members) == len(payments) and len(members) > 0:
+        for (member, contribution, pay) in zip(members, participation, payments):
+            if type(member) == str:
+                member = member.strip()
+                member = member.lower()
+                member = member.capitalize()
+            else:
+                print(3)
+                return False
+            
+            contribution = validate_int(contribution)
+            if contribution <= 0:
+                print(contribution)
+                print(4)
+                return False
+
+            pay = validate_float(pay)
+            if pay < 0:
+                print(5)
+                return False
+            
+            value += pay
+            
+            aux_member.append([member, contribution, pay])
+    else:
+        print(6)
+        return False
+
+    print(8)
+
+    return Bill(name, aux_member, value, day, month, year)
+
+def edit_member_name(bill : Bill, old_name : str, new_name : str):
+    ''' "
+    Edits the name of a member
+    @param bill: bill object
+    @param old_name: old name of the member
+    @param new_name: new name of the member
+    @return True if the name was changed, False otherwise
+    '''
+    if type(new_name) == str:
+            new_name = new_name.strip()
+            new_name = new_name.lower()
+            new_name = new_name.capitalize()
+    else:
+        return False
+
+    for member in bill.members:
+        if member[0] == new_name:
+            return False
+
+    for member in bill.members:
+        if member[0] == old_name:
+            member[0] = new_name
+            return True
+    return False
+
+def edit_bill_name(bill : Bill, new_name : str):
+    '''
+    Edits the name of a bill
+    @param bill: bill object
+    @param new_name: new name of the bill
+    @return True if the name was changed, False otherwise
+    '''
+    if type(new_name) == str:
+            new_name = new_name.strip()
+            new_name = new_name.lower()
+            new_name = new_name.capitalize()
+    else:
+        return False
+
+    bill.name = new_name
+    return True
+
+def solve_bill(bill : Bill):
+    '''
+    Solves a bill
+    @param bill: bill object
+    @return True if the bill was solved, False otherwise
+    '''
+    if bill.solved:
+        return False
+    else:
+        bill.solved = True
+        return True
+
+def unsolve_bill(bill : Bill):
+    '''
+    Unsolves a bill
+    @param bill: bill object
+    @return True if the bill was unsolved, False otherwise
+    '''
+    if not bill.solved:
+        return False
+    else:
+        bill.solved = False
+        return True
+
+
+
+def validate_int(string :str):
+    try:
+        return int(string)
+    except:
+        return -1
+
+
+def validate_float(string : str):
+    try:
+        return float(string)
+    except:
+        return -1
